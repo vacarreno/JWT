@@ -56,6 +56,9 @@ export default function Register() {
   };
 
   return (
+    <div className="container text-center mt-12">
+                    <h2 className="text-center mt-4">Formulario de Registro</h2>
+                    <p className="text-center mt-4">Por favor, complete el formulario para registrarse.</p>
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">Email:</label>
@@ -98,5 +101,6 @@ export default function Register() {
         )}
       </div>
     </form>
+    </div>
   );
 }
