@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 
 import { pizzaCart } from '../data/pizzas';
 import BotonIncrementar from '../components/BotonIncrementar';
 import BotonDisminuir from '../components/BotonDisminuir';
 
 export default function Cart() {
   const [cart, setCart] = useState(pizzaCart);
+  const navigate = useNavigate();
 
   const incrementarCantidad = (id) => {
     const nuevoCart = cart.map((pizza) =>
@@ -40,6 +42,7 @@ export default function Cart() {
         <div className="mt-4">
           <button
             className="btn btn-primary btn-lg fw-bold shadow-sm"
+            onClick={() => navigate('/')}
             type="button"
             style={{
               transition: 'transform 0.3s ease',
@@ -105,7 +108,7 @@ export default function Cart() {
               type="button"
               style={{ 
                 padding: '0.5rem 2rem',
-                transition: 'all 0.3s ease', // Suaviza la transición
+                transition: 'all 0.3s ease', 
               }}
             >
               <span>💳 Pagar</span>

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header.jsx";
 import fondoHeader from "../assets/img/Header.jpg";
 import CardPizza from "../components/CardPizza.jsx";
-// import BotonIncrementar from "../components/BotonIncrementar.jsx";
-// import BotonDisminuir from "../components/BotonDisminuir.jsx";
-// import { pizzas } from "../data/pizzas";
+import BotonIncrementar from "../components/BotonIncrementar.jsx";
+import BotonDisminuir from "../components/BotonDisminuir.jsx";
+import { pizzas } from "../data/pizzas";
 
 export default function Home() {
   // Estado para manejar el carrito de compras
