@@ -1,19 +1,20 @@
 import { Routes, Route } from "react-router-dom";
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "./context/GlobalContext";
 import "./App.css";
 import NavBarr from "./components/NavBarr";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Tareas from "./components/Tareas";
 import Cart from "./pages/Cart";
 import Footer from "./components/Footer";
 import Pizza from "./pages/Pizza";
 import Profile from "./components/Profile";
 import NotFound from "./components/NotFound";
 
+export default function App() {
+  const { userIsLogged } = useContext(GlobalContext);
 
-function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <NavBarr />
@@ -22,10 +23,20 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          {/*<Route path="/tareas" element={<Tareas />} />*/}
+          
+          {/* ✅ SOLO proteger Profile */}
+          <Route
+            path="/profile"
+            element={userIsLogged ? <Profile /> : <Login />}
+          />
+
+          {/* 🚀 Dejar Cart LIBRE */}
           <Route path="/cart" element={<Cart />} />
-          <Route path="/pizza/p001" element={<Pizza />} />
-          <Route path="/profile" element={<Profile />}/>
+
+          {/* Página de detalle */}
+          <Route path="/pizza/:parametro" element={<Pizza />} />
+
+          {/* Página 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
@@ -33,5 +44,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

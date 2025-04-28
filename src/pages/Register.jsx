@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
+  const { setUser, setUserIsLogged } = useContext(GlobalContext);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [validacontrasena, setValidaContrasena] = useState('');
   const [error, setError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
+  const navigate = useNavigate();
 
   const validarEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -14,6 +19,12 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (username.trim() === '') {
+      setError(true);
+      setMensajeError('Ingrese un nombre de usuario.');
+      return;
+    }
 
     if (email.trim() === '' || !validarEmail(email)) {
       setError(true);
@@ -47,60 +58,66 @@ export default function Register() {
 
     setError(false);
     setMensajeError('');
-    alert('Formulario enviado con éxito 🎉');
 
-    
+    const newUser = { username, email };
+    setUser(newUser);
+    setUserIsLogged(true);
+    localStorage.setItem("user", JSON.stringify(newUser));
+    navigate("/");
+
+    setUsername('');
     setEmail('');
     setContrasena('');
     setValidaContrasena('');
   };
 
   return (
-    <div className="container text-center mt-12">
-                    <h2 className="text-center mt-4">Formulario de Registro</h2>
-                    <p className="text-center mt-4">Por favor, complete el formulario para registrarse.</p>
-    <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label htmlFor="email" className="form-label">Email:</label>
-        <input
-          type="email"
-          className="form-control"
-          id="email"
-          placeholder="Ingrese su email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br />
+    <div className="container text-center mt-5">
+      <h2>Formulario de Registro</h2>
+      <p>Por favor, complete el formulario para registrarse.</p>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="usernameInput" className="form-label">Nombre de Usuario</label>
+          <input 
+            type="text" 
+            className="form-control"
+            id="usernameInput"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-        <label htmlFor="contrasena" className="form-label">Contraseña:</label>
-        <input
-          type="password"
-          className="form-control"
-          id="contrasena"
-          placeholder="Ingrese su contraseña"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-        />
-        <br />
+          <label htmlFor="emailInput" className="form-label mt-3">Email:</label>
+          <input 
+            type="email" 
+            className="form-control"
+            id="emailInput"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <label htmlFor="validacontrasena" className="form-label">Confirmar contraseña:</label>
-        <input
-          type="password"
-          className="form-control"
-          id="validacontrasena"
-          placeholder="Repita su contraseña"
-          value={validacontrasena}
-          onChange={(e) => setValidaContrasena(e.target.value)}
-        />
-        <br />
+          <label htmlFor="contrasena" className="form-label mt-3">Contraseña:</label>
+          <input
+            type="password"
+            className="form-control"
+            id="contrasena"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+          />
 
-        <button type="submit" className="btn btn-primary">Enviar</button>
+          <label htmlFor="validacontrasena" className="form-label mt-3">Confirmar Contraseña:</label>
+          <input
+            type="password"
+            className="form-control"
+            id="validacontrasena"
+            value={validacontrasena}
+            onChange={(e) => setValidaContrasena(e.target.value)}
+          />
 
-        {error && (
-          <p className="text-danger mt-2">{mensajeError}</p>
-        )}
-      </div>
-    </form>
+          <button type="submit" className="btn btn-primary w-100 mt-4">Registrarse</button>
+
+          {error && <p className="text-danger mt-2">{mensajeError}</p>}
+        </div>
+      </form>
     </div>
   );
 }

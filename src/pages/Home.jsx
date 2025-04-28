@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { GlobalContext } from "../context/GlobalContext"; // Asegúrate de importar el contexto
 import Header from "../components/Header.jsx";
 import fondoHeader from "../assets/img/Header.jpg";
 import CardPizza from "../components/CardPizza.jsx";
 import BotonIncrementar from "../components/BotonIncrementar.jsx";
 import BotonDisminuir from "../components/BotonDisminuir.jsx";
-import { pizzas } from "../data/pizzas";
 
 export default function Home() {
+ 
   // Estado para manejar el carrito de compras
   const [cuenta, setCuenta] = useState(0);
 
@@ -18,23 +19,8 @@ export default function Home() {
     setCuenta((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
-  // Estado para las pizzas obtenidas desde la API
-  const [pizzas, setPizzas] = useState([]);
-
-  const getPizzas = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/pizzas");
-      const data = await response.json();
-      setPizzas(data);
-      console.log(data);
-    } catch (error) {
-      console.error("Error al obtener las pizzas:", error);
-    }
-  };
-
-  useEffect(() => {
-    getPizzas();
-  }, []);
+  // Consumiendo el contexto para obtener las pizzas
+  const { pizzas } = useContext(GlobalContext);
 
   return (
     <div>
@@ -52,7 +38,6 @@ export default function Home() {
               className="col-12 col-sm-6 col-md-4 d-flex justify-content-center"
             >
               <CardPizza objeto={pizza} />
-              
             </div>
           ))}
         </div>
