@@ -15,12 +15,11 @@ export default function Login() {
     return regex.test(email);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError(false);
     setMensajeError('');
+    setError(false);
 
-    // Validaciones locales
     if (email.trim() === '' || contrasena.trim() === '') {
       setError(true);
       setMensajeError('Todos los campos son obligatorios.');
@@ -39,32 +38,16 @@ export default function Login() {
       return;
     }
 
-    // Envío al backend
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: contrasena }),
-      });
+    // Simulación de login exitoso
+    const loggedUser = { email };
 
-      const data = await response.json();
-      console.log(data);
-      
-      if (!response.ok) {
-        throw new Error(data?.error || 'Error al iniciar sesión.');
-      }
+    setUser(loggedUser);
+    setUserToken(true);
+    localStorage.setItem("user", JSON.stringify(loggedUser));
+    navigate("/");
 
-      // Guardar usuario y token
-      setUser({ email });
-      setUserToken(data.token);
-      localStorage.setItem("user", JSON.stringify({ email }));
-      localStorage.setItem("token", data.token);
-
-      navigate("/");
-    } catch (err) {
-      setError(true);
-      setMensajeError(err.message);
-    }
+    setEmail('');
+    setContrasena('');
   };
 
   return (

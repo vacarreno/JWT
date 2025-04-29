@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { GlobalContext } from "../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 
@@ -6,39 +6,10 @@ export default function Profile() {
   const { user, setUser, setUserToken } = useContext(GlobalContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        fetch("http://localhost:5000/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error('Error al obtener perfil');
-            return res.json();
-          })
-          .then((data) => {
-            setUser(data);
-            setUserToken(token);
-          })
-          .catch((err) => {
-            console.error(err);
-            setUser(null);
-            setUserToken(false);
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-          });
-      }
-    }
-  }, [user, setUser, setUserToken]);
-
   const handleLogout = () => {
     setUser(null);
     setUserToken(false);
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
     navigate('/login');
   };
 
@@ -61,7 +32,7 @@ export default function Profile() {
             className="rounded-circle mb-3"
             style={{ width: '120px', height: '120px', objectFit: 'cover' }}
           />
-          <h3 className="card-title">{user.username || user.email}</h3>
+          <h3 className="card-title">{user.username}</h3>
           <p className="text-muted">Web Developer</p>
           <p className="card-text">
             Apasionado por crear sitios web hermosos y funcionales. Siempre aprendiendo y explorando nuevas tecnologías.
