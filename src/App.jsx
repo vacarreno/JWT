@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import React, { useContext } from "react";
 import { GlobalContext } from "./context/GlobalContext";
 import "./App.css";
@@ -11,9 +11,11 @@ import Footer from "./components/Footer";
 import Pizza from "./pages/Pizza";
 import Profile from "./components/Profile";
 import NotFound from "./components/NotFound";
+import User from "./pages/User";
+import Admin from "./pages/Admin";
 
 export default function App() {
-  const { userIsLogged } = useContext(GlobalContext);
+  const { userToken, user } = useContext(GlobalContext);
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -22,21 +24,21 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          
-          {/* ✅ SOLO proteger Profile */}
+          <Route path="/login" element={userToken ? <Navigate to={"/"} /> : <Login />} />          
+          {/* Ruta protegida para Profile */}
           <Route
             path="/profile"
-            element={userIsLogged ? <Profile /> : <Login />}
-          />
-
-          {/* 🚀 Dejar Cart LIBRE */}
-          <Route path="/cart" element={<Cart />} />
-
-          {/* Página de detalle */}
+            element={userToken ? <Profile /> : <Navigate to={"/login"} />}
+          />    
+           {/* Ruta protegida para Profile */}
+           <Route
+            path="/admin"
+            element={userToken ? <Admin /> : <Navigate to={"/login"} />}
+          />       
+          <Route path="/cart" element={<Cart />} />          
           <Route path="/pizza/:parametro" element={<Pizza />} />
-
-          {/* Página 404 */}
+          <Route path="/user/:nombre" element={<User />} />   
+          <Route path="/admin" element={user?.role === "admin" ? <Admin /> : <Navigate to={"/login"} /> } />    
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -11,13 +11,7 @@ export default function Home() {
   // Estado para manejar el carrito de compras
   const [cuenta, setCuenta] = useState(0);
 
-  const incrementarCuenta = () => {
-    setCuenta((prev) => prev + 1);
-  };
-
-  const disminuirCuenta = () => {
-    setCuenta((prev) => (prev > 0 ? prev - 1 : 0));
-  };
+  
 
   // Consumiendo el contexto para obtener las pizzas
   const { pizzas } = useContext(GlobalContext);

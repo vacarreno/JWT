@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';  // Importar Link de react-router-dom
 import { GlobalContext } from '../context/GlobalContext';
 
 export default function CardPizza({ objeto }) {
@@ -50,16 +51,16 @@ export default function CardPizza({ objeto }) {
         <p className="card-text text-gray-600">{desc}</p>
         <div style={{ borderTop: '2px solid #ccc', margin: '10px 0' }}></div>
 
-          <p className="card-subtitle mb-2 text-muted fw-bold">Ingredientes:</p>
-          <ul className="list-unstyled mb-2">
-            {Array.isArray(ingredients) ? (
-              ingredients.map((ing, index) => (
-                <li key={index}>🍕 {ing}</li>
-              ))
-            ) : (
-              <li>🍕 {ingredients}</li>
-            )}
-          </ul>
+        <p className="card-subtitle mb-2 text-muted fw-bold">Ingredientes:</p>
+        <ul className="list-unstyled mb-2">
+          {Array.isArray(ingredients) ? (
+            ingredients.map((ing, index) => (
+              <li key={index}>🍕 {ing}</li>
+            ))
+          ) : (
+            <li>🍕 {ingredients}</li>
+          )}
+        </ul>
         <p className="font-bold">{priceFormateado}</p>
 
         {/* Mensaje de éxito al agregar al carrito */}
@@ -69,14 +70,21 @@ export default function CardPizza({ objeto }) {
           </div>
         )}
 
-        <div className="mt-3 flex justify-between">
+        {/* Separación y alineación de botones */}
+        <div className="mt-3 grid grid-cols-2 gap-6">
           <button
-            className="btn btn-outline-warning border-2 border-warning px-4 py-2"
+            className="btn btn-outline-warning border-2 border-warning px-4 py-2 justify-self-start"
             type="button"
             onClick={handleAddToCart}
           >
             🛒 Añadir
           </button>
+          <Link
+            to={`/pizza/${id}`}  // Usamos el id para redirigir a la página específica
+            className="link btn-outline-warning border-2 border-warning px-4 py-2 justify-self-end"
+          >
+            Ver más...
+          </Link>
         </div>
       </div>
     </div>

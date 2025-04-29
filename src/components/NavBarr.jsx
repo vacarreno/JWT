@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext'; // Importar el contexto global
 
 export default function NavBarr() {
   // Acceder al contexto
-  const { userIsLogged, cart, user, setUser, setUserIsLogged } = useContext(GlobalContext);
+  const { userToken, cart, user, setUser, setUserToken } = useContext(GlobalContext);
   const navegar = useNavigate();
 
   const handleLogout = () => {
     setUser(null); // Limpiar el usuario
     localStorage.removeItem("user"); // Eliminar el usuario de localStorage 
-    setUserIsLogged(false);
+    setUserToken(false);
     navegar("/"); // Cambiar el estado de autenticación
   }
 
@@ -22,7 +22,7 @@ export default function NavBarr() {
   });
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div className="container-fluid">
         <button
           className="navbar-toggler"
@@ -36,50 +36,63 @@ export default function NavBarr() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <Link className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/">
           Pizzería Mamma Mía!
-        </Link>
+        </NavLink>
 
         <div className="collapse navbar-collapse" id="navbarExample">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="btn btn-outline-success mx-2" to="/">
-                🍕 Home
-              </Link>
+              <NavLink 
+                className={({ isActive }) => isActive ? "btn btn-outline-success mx-2" : "btn btn-outline-danger mx-2"} 
+                to="/"
+              >
+                🍕 Inicio
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="btn btn-outline-success mx-2" to="/cart">
+              <NavLink 
+                className={({ isActive }) => isActive ? "btn btn-outline-success mx-2" : "btn btn-outline-danger mx-2"} 
+                to="/cart"
+              >
                 🍕 Cart
-              </Link>
+              </NavLink>
             </li>
 
-            {!userIsLogged ? (
+            {!userToken ? (
               <>
                 <li className="nav-item">
-                  <Link className="btn btn-outline-primary mx-2" to="/login">
-                  🔐 Login
-                  </Link>
+                  <NavLink 
+                    className={({ isActive }) => isActive ? "btn btn-outline-success mx-2" : "btn btn-outline-danger mx-2"} 
+                    to="/login"
+                  >
+                    🔐 Login
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link className="btn btn-outline-primary mx-2" to="/register">
-                  🔐 Registro
-                  </Link>
+                  <NavLink 
+                    className={({ isActive }) => isActive ? "btn btn-outline-success mx-2" : "btn btn-outline-danger mx-2"} 
+                    to="/register"
+                  >
+                    🔐 Registro
+                  </NavLink>
                 </li>
               </>
             ) : (
               <li className="nav-item dropdown">
-                <Link
+                <a
                   className="nav-link dropdown-toggle"
-                  to="#"
+                  href="#"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   🔓 Perfil
-                </Link>
+                </a>
+
                 <ul className="dropdown-menu">
                   <li>
-                    <Link className="dropdown-item" to="/profile">
+                    <NavLink className="dropdown-item" to="/profile">
                       <img 
                         src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
                         alt="user" 
@@ -89,7 +102,7 @@ export default function NavBarr() {
                         className="me-2"
                       />
                       {user?.username}
-                    </Link>
+                    </NavLink>
                   </li>
                   <li><hr className="dropdown-divider" /></li>
                   <li>
@@ -101,15 +114,31 @@ export default function NavBarr() {
                 </ul>
               </li>
             )}
+            
+            {userToken && (
+              <li className="nav-item">
+                <NavLink 
+                  className={({ isActive }) => isActive ? "btn btn-outline-success mx-2" : "btn btn-outline-danger mx-2"} 
+                  to="/admin"
+                >
+                  📜 Admin Panel
+                </NavLink>  
+              </li>
+            )}
           </ul>
 
           <div className="d-flex align-items-center">
-            <Link className="btn btn-danger mx-2" to="/cart">
+            <NavLink className="btn btn-danger mx-2" to="/cart">
               🛒 Total: {precioFormateado}
-            </Link>
+            </NavLink>
           </div>
         </div>
       </div>
+
+      {/* Ícono fijo en la parte inferior derecha */}
+      <NavLink to="/cart" className="btn btn-outline-warning position-fixed bottom-0 end-0 m-3">
+        🛒
+      </NavLink>
     </nav>
   );
 }

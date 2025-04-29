@@ -3,12 +3,12 @@ import { GlobalContext } from "../context/GlobalContext";
 import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
-  const { user, setUser, setUserIsLogged } = useContext(GlobalContext);
+  const { user, setUser, setUserToken } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     setUser(null);
-    setUserIsLogged(false);
+    setUserToken(false);
     localStorage.removeItem('user');
     navigate('/login');
   };
@@ -24,7 +24,7 @@ export default function Profile() {
 
   return (
     <div className="container d-flex flex-column align-items-center mt-5">
-      <div className="card shadow p-4" style={{ width: '100%', maxWidth: '400px' }}>
+      <div className="card shadow p-4" style={{ width: '100%', maxWidth: '400px', marginTop: '70px' }} >
         <div className="text-center">
           <img
             src="https://randomuser.me/api/portraits/men/52.jpg"

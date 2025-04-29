@@ -9,6 +9,7 @@ const Header = ({ backgroundImage }) => {
         height: '300px',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        marginTop: '55px', // Esto bajará el header 13px
       }}
     >
       <div className="bg-dark bg-opacity-50 p-3 rounded">

@@ -3,7 +3,7 @@ import { GlobalContext } from '../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const { setUserIsLogged } = useContext(GlobalContext);
+  const { setUser, setUserToken } = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState(false);
@@ -39,8 +39,11 @@ export default function Login() {
     }
 
     // Simulación de login exitoso
-    setUserIsLogged(true);
-    localStorage.setItem("user", JSON.stringify({ email })); // Solo para simular
+    const loggedUser = { email };
+
+    setUser(loggedUser);
+    setUserToken(true);
+    localStorage.setItem("user", JSON.stringify(loggedUser));
     navigate("/");
 
     setEmail('');
@@ -49,7 +52,7 @@ export default function Login() {
 
   return (
     <div className="container text-center mt-5">
-      <h2>Login</h2>
+      <h2 style={{ marginTop: '70px' }}>Login</h2>
       <p>Ingrese sus credenciales para ingresar al sistema.</p>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

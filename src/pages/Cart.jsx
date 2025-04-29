@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import BotonIncrementar from '../components/BotonIncrementar';
 import BotonDisminuir from '../components/BotonDisminuir';
 
 export default function Cart() {
-  const { cart, setCart, userIsLogged } = useContext(GlobalContext);
+  const { cart, setCart, userToken } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const incrementarCantidad = (id) => {
@@ -31,7 +31,7 @@ export default function Cart() {
   });
 
   const handlePay = () => {
-    if (userIsLogged) {
+    if (userToken) {
       alert('¡Compra realizada con éxito! 🎉');
     } else {
       alert('Debe iniciar sesión para realizar el pago.');
@@ -41,7 +41,7 @@ export default function Cart() {
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">🛒 Carrito de Compras</h2>
+      <h2 className="mb-4" style={{ marginTop: '70px' }}>🛒 Carrito de Compras</h2>
 
       {!cart || cart.length === 0 ? (
         <div className="alert alert-info text-center fw-bold shadow-sm fs-4 py-4" role="alert">
@@ -95,13 +95,19 @@ export default function Cart() {
             <h4>Total: {totalFormateado}</h4>
 
             <button
-              className="btn btn-success btn-lg rounded-2 shadow-sm fw-bold d-flex align-items-center justify-content-center border border-secondary"
-              type="button"
-              style={{ padding: '0.5rem 2rem', transition: 'all 0.3s ease' }}
-              onClick={handlePay}
-            >
-              <span>💳 Pagar</span>
-            </button>
+  className="btn btn-success btn-lg rounded-2 shadow-sm fw-bold d-flex align-items-center justify-content-center border border-secondary"
+  type="button"
+  style={{
+    padding: '0.5rem 2rem',
+    transition: 'all 0.3s ease',
+    opacity: userToken ? 1 : 0.5,
+    cursor: userToken ? 'pointer' : 'not-allowed',
+  }}
+  onClick={handlePay}
+  disabled={!userToken} // ✅  Comentario normal fuera de las llaves
+>
+  <span>💳 Pagar</span>
+</button>
           </div>
         </div>
       )}

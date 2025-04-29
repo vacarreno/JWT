@@ -3,14 +3,14 @@ import { GlobalContext } from '../context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const { setUser, setUserIsLogged } = useContext(GlobalContext);
+  const { setUser, setUserToken } = useContext(GlobalContext);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [validacontrasena, setValidaContrasena] = useState('');
+  const [validaContrasena, setValidaContrasena] = useState('');
   const [error, setError] = useState(false);
   const [mensajeError, setMensajeError] = useState('');
-  const navigate = useNavigate();
+  const navegar = useNavigate();
 
   const validarEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,6 +20,7 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validaciones
     if (username.trim() === '') {
       setError(true);
       setMensajeError('Ingrese un nombre de usuario.');
@@ -44,27 +45,34 @@ export default function Register() {
       return;
     }
 
-    if (validacontrasena.trim() === '') {
+    if (validaContrasena.trim() === '') {
       setError(true);
       setMensajeError('Confirme su contraseña.');
       return;
     }
 
-    if (contrasena !== validacontrasena) {
+    if (contrasena !== validaContrasena) {
       setError(true);
       setMensajeError('Las contraseñas no coinciden.');
       return;
     }
 
+    // Si pasa las validaciones
     setError(false);
     setMensajeError('');
 
-    const newUser = { username, email };
-    setUser(newUser);
-    setUserIsLogged(true);
-    localStorage.setItem("user", JSON.stringify(newUser));
-    navigate("/");
+    // Crear el usuario
+    const newUser = { username, email, role: 'admin' };
 
+    // Guardar en el contexto y localStorage
+    setUser(newUser);
+    setUserToken(true);
+    localStorage.setItem('user', JSON.stringify(newUser));
+
+    // Redirigir a la página principal
+    navegar("/");
+
+    // Limpiar formulario
     setUsername('');
     setEmail('');
     setContrasena('');
@@ -73,9 +81,10 @@ export default function Register() {
 
   return (
     <div className="container text-center mt-5">
-      <h2>Formulario de Registro</h2>
+      <h2 style={{ marginTop: '70px' }}>Formulario de Registro</h2>
       <p>Por favor, complete el formulario para registrarse.</p>
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} className="text-start mx-auto" style={{ maxWidth: "400px" }}>
         <div className="mb-3">
           <label htmlFor="usernameInput" className="form-label">Nombre de Usuario</label>
           <input 
@@ -85,8 +94,10 @@ export default function Register() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+        </div>
 
-          <label htmlFor="emailInput" className="form-label mt-3">Email:</label>
+        <div className="mb-3">
+          <label htmlFor="emailInput" className="form-label">Email</label>
           <input 
             type="email" 
             className="form-control"
@@ -94,29 +105,33 @@ export default function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+        </div>
 
-          <label htmlFor="contrasena" className="form-label mt-3">Contraseña:</label>
+        <div className="mb-3">
+          <label htmlFor="contrasenaInput" className="form-label">Contraseña</label>
           <input
             type="password"
             className="form-control"
-            id="contrasena"
+            id="contrasenaInput"
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
           />
+        </div>
 
-          <label htmlFor="validacontrasena" className="form-label mt-3">Confirmar Contraseña:</label>
+        <div className="mb-3">
+          <label htmlFor="validaContrasenaInput" className="form-label">Confirmar Contraseña</label>
           <input
             type="password"
             className="form-control"
-            id="validacontrasena"
-            value={validacontrasena}
+            id="validaContrasenaInput"
+            value={validaContrasena}
             onChange={(e) => setValidaContrasena(e.target.value)}
           />
-
-          <button type="submit" className="btn btn-primary w-100 mt-4">Registrarse</button>
-
-          {error && <p className="text-danger mt-2">{mensajeError}</p>}
         </div>
+
+        <button type="submit" className="btn btn-primary w-100">Registrarse</button>
+
+        {error && <p className="text-danger mt-2">{mensajeError}</p>}
       </form>
     </div>
   );

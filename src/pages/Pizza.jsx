@@ -1,3 +1,4 @@
+// Pizza.jsx Es el detalle de cada Pizza.
 import React, { useState, useEffect } from "react";
 
 export default function Pizza() {
@@ -25,8 +26,8 @@ export default function Pizza() {
   if (!pizza) return <p className="text-center mt-5 text-danger">No se encontró la pizza.</p>;
 
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <div className="container my-5" >
+      <div className="row justify-content-center" style={{ marginTop: '70px' }}>
         <div className="col-md-8">
           <div className="card shadow-lg border-0">
             <img
@@ -46,9 +47,12 @@ export default function Pizza() {
               </ul>
               <div className="d-flex justify-content-between align-items-center mt-4">
                 <h4 className="mb-0 text-success fw-bold">Precio: ${pizza.price}</h4>
-                <button className="btn btn-primary" type="button">
-                  Añadir al carrito
-                </button>
+                
+                        <button className="btn btn-primary" type="button">
+                          Añadir al carrito
+                        </button>
+                       
+                
               </div>
             </div>
           </div>
